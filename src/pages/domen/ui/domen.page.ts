@@ -9,7 +9,6 @@ import {
   normalizeDomainInput,
   resolveFullDomain,
 } from '@features/domain/model/domain.store';
-import { CompaniesApi } from '@shared/api/companies.api';
 import { ToastService } from '@shared/ui/toast/toast.service';
 import { IconComponent } from '@shared/ui/icon/icon.component';
 import { I18nStore, isSupportedLocale } from '@shared/i18n/i18n.store';
@@ -89,7 +88,6 @@ import { I18nStore, isSupportedLocale } from '@shared/i18n/i18n.store';
 })
 export class DomenPage implements OnInit {
   readonly domainStore = inject(DomainStore);
-  private readonly companiesApi = inject(CompaniesApi);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
   readonly i18n = inject(I18nStore);
@@ -114,25 +112,6 @@ export class DomenPage implements OnInit {
     const normalized = normalizeDomainInput(this.domainInput);
     if (!isValidDomainInput(normalized)) {
       this.toast.show(this.i18n.t('toast.enter_valid_domain'));
-      return;
-    }
-    const slug = toCompanySlug(normalized);
-    if (!slug) {
-      this.toast.show(this.i18n.t('toast.enter_valid_domain'));
-      return;
-    }
-    try {
-      const company = await this.companiesApi.findCompanyBySlug(slug);
-      if (!company) {
-        this.toast.show(this.i18n.t('toast.enter_valid_domain'));
-        return;
-      }
-    } catch {
-      if (!this.domainStore.setDomain(normalized)) {
-        this.toast.show(this.i18n.t('toast.enter_valid_domain'));
-        return;
-      }
-      void this.router.navigateByUrl('/login');
       return;
     }
     if (!this.domainStore.setDomain(normalized)) {
@@ -160,10 +139,4 @@ export class DomenPage implements OnInit {
     if (!isSupportedLocale(value)) return;
     this.i18n.setLocale(value);
   }
-}
-
-function toCompanySlug(value: string): string {
-  if (!value) return '';
-  const host = value.split(':')[0];
-  return host.split('.')[0] ?? '';
 }
