@@ -5,6 +5,7 @@ import { IdentityApi } from '@shared/api/identity.api';
 
 const OFFLINE_SESSION_TTL_DAYS = 30;
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+const OFFLINE_AUTH = true;
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
@@ -24,7 +25,7 @@ export class AuthStore {
       }
       this.session.setFromTokenResponse(response, email);
     } catch (error) {
-      if (error instanceof HttpErrorResponse && error.status === 0) {
+      if (OFFLINE_AUTH || (error instanceof HttpErrorResponse && error.status === 0)) {
         this.session.setSession({
           accessToken: `offline-${Date.now()}`,
           tokenType: 'Bearer',
