@@ -8,17 +8,13 @@ import { IconName } from './icon.types';
     <span class="inline-flex items-center justify-center leading-none shrink-0 [&_svg]:block" aria-hidden="true">
       @switch (name) {
         @case ('logo') {
-          <svg viewBox="0 0 24 24" [attr.width]="size" [attr.height]="size" fill="none">
-            <path
-              d="M12 2.5c5.25 0 9.5 4.25 9.5 9.5S17.25 21.5 12 21.5 2.5 17.25 2.5 12 6.75 2.5 12 2.5Z"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-            <path
-              d="M9 12.25c1.5-3.25 4.5-4.75 7-5-.25 2.75-1.75 5.75-5 7.25-1.5.75-3 1-4.25.9.15-1 .55-1.8 1.25-3.15Z"
-              fill="currentColor"
-            />
-          </svg>
+          <img
+            src="/admin_logo.png"
+            [style.width.px]="size"
+            [style.height.px]="size"
+            class="block object-contain"
+            alt=""
+          />
         }
         @case ('dashboard') {
           <svg viewBox="0 0 24 24" [attr.width]="size" [attr.height]="size" fill="none">

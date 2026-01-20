@@ -103,7 +103,7 @@ export class CoursesPage {
   private readonly orgStore = inject(OrgStore);
   readonly i18n = inject(I18nStore);
 
-  readonly courses = this.courseStore.courses;
+  readonly courses = this.courseStore.filteredCourses;
   readonly loading = this.courseStore.loading;
   readonly isB2b = this.orgStore.isB2b;
 

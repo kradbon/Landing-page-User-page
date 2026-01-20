@@ -144,10 +144,10 @@ type NavGroup = {
               }
             </select>
             <button class="icon-btn" type="button" (click)="toggleNotifications()">
-              <shared-icon [name]="notificationsEnabled() ? 'bell' : 'bell_off'" [size]="24"></shared-icon>
+              <shared-icon [name]="notificationsEnabled() ? 'bell_off' : 'bell'" [size]="24"></shared-icon>
             </button>
             <button class="icon-btn" type="button" (click)="toggleTheme()">
-              <shared-icon [name]="theme() === 'dark' ? 'moon' : 'sun'" [size]="24"></shared-icon>
+              <shared-icon [name]="theme() === 'dark' ? 'sun' : 'moon'" [size]="24"></shared-icon>
             </button>
           </div>
 
@@ -293,7 +293,9 @@ export class AppShellComponent {
 
   submitSearch() {
     const q = this.search.trim();
+    this.courseStore.setSearchQuery(q);
     if (!q) return;
+    void this.router.navigateByUrl('/courses');
     this.toast.show(this.i18n.t('toast.search', { query: q }));
   }
 

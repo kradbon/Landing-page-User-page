@@ -23,6 +23,26 @@ export class CourseStore {
 
   readonly loading = signal(false);
 
+  readonly searchQuery = signal('');
+
+  readonly filteredCourses = computed(() => {
+    const query = this.searchQuery().trim().toLowerCase();
+    if (!query) return this.coursesSignal();
+    return this.coursesSignal().filter((course) => {
+      const haystack = [
+        course.title,
+        course.teacher,
+        course.description,
+        ...course.lessons.map((lesson) => lesson.title),
+        ...course.quizzes.map((quiz) => quiz.title),
+        ...course.tests.map((test) => test.title),
+      ]
+        .join(' ')
+        .toLowerCase();
+      return haystack.includes(query);
+    });
+  });
+
   readonly activeCourseId = signal<string | null>(null);
 
   readonly activeCourse = computed(() => {
@@ -68,6 +88,10 @@ export class CourseStore {
 
   setActiveCourse(courseId: string) {
     this.activeCourseId.set(courseId);
+  }
+
+  setSearchQuery(query: string) {
+    this.searchQuery.set(query);
   }
 
   async startOrContinueLesson(courseId: string, lessonId: string) {
