@@ -128,7 +128,11 @@ export class DomenPage implements OnInit {
         return;
       }
     } catch {
-      this.toast.show(this.i18n.t('error.network'));
+      if (!this.domainStore.setDomain(normalized)) {
+        this.toast.show(this.i18n.t('toast.enter_valid_domain'));
+        return;
+      }
+      void this.router.navigateByUrl('/login');
       return;
     }
     if (!this.domainStore.setDomain(normalized)) {
