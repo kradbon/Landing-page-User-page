@@ -1,0 +1,50 @@
+shared-icon[name="logo"] {
+  display: inline-flex;
+  width: 72px;
+  height: 72px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  transform: scale(1.35);
+  transform-origin: center;
+}
+
+shared-icon[name="logo"] svg,
+shared-icon[name="logo"] img {
+  opacity: 0;
+}
+
+shared-icon[name="logo"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/portal/login-icon.png") center / contain no-repeat;
+}
+
+/* Center the header action icons (bell + theme) */
+button.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+}
+
+button.icon-btn shared-icon,
+button.icon-btn svg,
+button.icon-btn img {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  line-height: 0;
+  width: 22px;
+  height: 22px;
+}
+
+button.icon-btn svg {
+  display: block;
+  margin: auto;
+  width: 22px;
+  height: 22px;
+}

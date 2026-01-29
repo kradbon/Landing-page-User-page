@@ -1,102 +1,83 @@
-# UserPage
+# Brooklyn LMS Platform
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+This repo hosts the Brooklyn LMS landing page builder/runtime (Next.js + API) and the student portal (User Page).
 
-## Purpose
+## Apps
+- `apps/api` Express + Mongoose API
+- `apps/web` Next.js runtime + admin builder + portal host at `/portal`
+- `apps/user-page` Angular student portal source
 
-This program is the Brooklyn LMS student portal. It exists to:
-
-- Give learners a single place to access courses, lessons, quizzes, tests, downloads, notebook, and AI tutor.
-- Support company-specific access via a domain step (`/domen`) so each customer uses `<company>.tlms.com`.
-- Integrate with the Identity service for authentication/authorization; users are provisioned by admins.
-- Validate the frontend integration with the Identity API while backend services are being finalized.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
+## Quick start (Docker)
+1) Copy envs:
+```
+cp .env.example .env
+```
+2) Start services:
+```
+docker compose up --build
+```
+3) Seed demo tenant and default landing:
+```
+docker compose exec api node dist/seed.js
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Service URLs:
+- Runtime: `http://localhost:3001/arkon/home`
+- Builder: `http://localhost:3001/admin/hero/editor`
+- Leads: `http://localhost:3001/admin/leads`
+- Audit: `http://localhost:3001/admin/history`
+- API: `http://localhost:3000`
+- MinIO: `http://localhost:9001` (console)
+- Portal: `http://localhost:3001/portal/login`
 
-## Code scaffolding
+## Local dev (without Docker)
+- API: `npm --workspace apps/api run dev`
+- Web: `npm --workspace apps/web run dev`
+- Seed: `npm --workspace apps/api run seed`
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Environment variables
+See `.env.example` for full list.
+- `MONGODB_URI` Mongo connection string
+- `MINIO_ENDPOINT` MinIO S3 endpoint
+- `MINIO_PUBLIC_URL` Public base URL for serving assets (defaults to `MINIO_ENDPOINT`)
+- `MINIO_BUCKET` Bucket name (default `brooklyn-lms`)
+- `PUBLIC_BASE_URL` Base URL for invite links (e.g. `http://localhost:3001`)
+- `USER_PAGE_BASE_URL` Redirect target after successful registration (must be a URL)
+- `AUTH_API_BASE_URL` Base URL for external `/auth/register`
 
-```bash
-ng generate component component-name
-```
+## Core flows (landing + builder)
+1) Admin edits landing at `/admin/hero/editor` and saves.
+2) Publish to make it live at `/{tenant}/{slug}`.
+3) Submit lead in the Apply section.
+4) Approve lead in `/admin/leads` to get invite link.
+5) Open invite link and submit registration.
+6) Successful registration redirects to `USER_PAGE_BASE_URL`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Student portal (User Page)
+The portal is an Angular app hosted under `/portal` by the Next.js app. Source lives in `apps/user-page`.
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-## Identity API integration
-
-This app connects to the Identity service documented at `/identity/docs`. All endpoints listed in the spec are wired in a single API wrapper and use an obfuscated base URL and route paths.
-
-### Where the integration lives
-
-- API wrapper: `src/shared/api/identity.api.ts`
-- Auth session storage: `src/shared/api/auth-session.service.ts`
-- Base URL obfuscation: `src/shared/api/identity-base-url.ts`
-- Route path obfuscation: `src/shared/api/identity-routes.ts`
-- Auth header injection: `src/shared/api/auth.interceptor.ts`
+### Identity API integration (portal)
+- API wrapper: `apps/user-page/src/shared/api/identity.api.ts`
+- Auth session storage: `apps/user-page/src/shared/api/auth-session.service.ts`
+- Base URL obfuscation: `apps/user-page/src/shared/api/identity-base-url.ts`
+- Route path obfuscation: `apps/user-page/src/shared/api/identity-routes.ts`
+- Auth header injection: `apps/user-page/src/shared/api/auth.interceptor.ts`
 
 ### Domain (company) flow
-
 - Public route: `/domen` (company domain entry before login).
 - Stored in `localStorage` under `user-page.domain.v1`.
 - Displayed on the login screen as the selected company portal.
 - Auto-detected from the current host if it ends with `.tlms.com`.
-- Change the suffix in `src/features/domain/model/domain.store.ts` (`DOMAIN_SUFFIX`).
+- Change the suffix in `apps/user-page/src/features/domain/model/domain.store.ts` (`DOMAIN_SUFFIX`).
 
 ### Auth and session rules
-
 - Login uses password flow and expects `access_token` (plus optional `token_type`, `expires_in`, `expires_at`).
 - If expiry is not provided by the API, the client defaults to 30 days.
 - Session is stored in `localStorage` under `user-page.session.v1`.
 - Self-registration is disabled in the UI; users are provisioned by admin portal.
-- Test account button reads credentials from `src/pages/login/ui/login.page.ts` (`TEST_ACCOUNT`).
+- Test account button reads credentials from `apps/user-page/src/pages/login/ui/login.page.ts` (`TEST_ACCOUNT`).
 
 ### Testing login
-
 - The login endpoint only accepts `POST`. Opening the URL in a browser sends `GET` and returns "Method Not Allowed".
 - Example (PowerShell):
   ```powershell
@@ -107,18 +88,25 @@ This app connects to the Identity service documented at `/identity/docs`. All en
     -Body $body
   ```
 
-### Endpoint coverage
+## API endpoints
+Public:
+- `GET  /public/landing/:tenant/:slug`
+- `POST /public/leads`
+- `GET  /public/invite/validate?token=...`
 
-- Auth: `POST /auth/auth/register`, `POST /auth/auth/login`
-- Users: `GET/POST /users/users`
-- Roles: `GET/POST /roles/roles`, `PATCH/DELETE /roles/roles/{role_id}`, `PUT /roles/roles/{role_id}/permissions`
-- Permissions: `GET/POST /permissions/permissions`, `PATCH /permissions/permissions/{permission_id}`
-- Health: `GET /health/health`, `GET /health/ready`
+Admin (protected):
+- `GET   /admin/tenant`
+- `PATCH /admin/tenant`
+- `GET   /admin/landing/:slug`
+- `PATCH /admin/landing/:slug`
+- `POST  /admin/landing/:slug/publish`
+- `GET   /admin/audit?slug=home`
+- `GET   /admin/leads?status=PENDING`
+- `POST  /admin/leads/:id/accept`
+- `POST  /admin/leads/:id/decline`
+- `POST  /admin/assets/presign-upload`
 
-### Obfuscation notes
-
-The base URL and route paths are stored as base64 strings of the reversed plaintext. To update:
-
-1. Reverse the new URL or path.
-2. Base64 encode the reversed string.
-3. Replace the encoded value in `src/shared/api/identity-base-url.ts` or `src/shared/api/identity-routes.ts`.
+## Notes
+- Default landing template is original copy and layout with a premium rhythm inspired by School of Motion, without copying any assets.
+- All landing configs live in MongoDB; images live in MinIO and are referenced by URL.
+- Tenant isolation uses JWT when available; for local dev you can pass `x-tenant-id`, `x-user-id`, and `x-user-email` headers.

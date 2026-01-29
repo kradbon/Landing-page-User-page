@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>UserPage</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/admin_logo.png">
+  <script>
+    (function () {
+      try {
+        var key = 'user-page.theme.v1';
+        var raw = window.localStorage.getItem(key);
+        var theme =
+          raw === 'light' || raw === 'dark'
+            ? raw
+            : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      } catch {
+        // ignore
+      }
+    })();
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
