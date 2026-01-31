@@ -69,7 +69,7 @@ export const defaultPages: Record<string, PageContent> = {
           "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1000&q=80&auto=format&fit=crop"
       }
     ],
-    cta: { label: "Apply now", href: "/" }
+    cta: { label: "Apply now", href: "/#contact" }
   },
   community: {
     slug: "community",
@@ -218,13 +218,90 @@ export const defaultPages: Record<string, PageContent> = {
       "Equip your team with a shared baseline in design and delivery. You get flexible licensing, consolidated billing, and a clear way to track progress.",
     heroImage:
       "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=1200&q=80&auto=format&fit=crop",
+    cards: [
+      {
+        title: "Avery Holt",
+        body: "Design Ops Lead",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=240&q=80&auto=format&fit=crop"
+      },
+      {
+        title: "Maya Ortiz",
+        body: "UX Strategist",
+        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=240&q=80&auto=format&fit=crop"
+      },
+      {
+        title: "Samir Patel",
+        body: "Product Designer",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&q=80&auto=format&fit=crop"
+      },
+      {
+        title: "Leah Kopke",
+        body: "Motion Designer",
+        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=240&q=80&auto=format&fit=crop"
+      },
+      {
+        title: "Renato Cassis",
+        body: "Design Lead",
+        image: "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=240&q=80&auto=format&fit=crop"
+      },
+      {
+        title: "Sheree Strasberg",
+        body: "Brand Designer",
+        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=240&q=80&auto=format&fit=crop"
+      },
+      {
+        title: "Corey Lampron",
+        body: "UX Researcher",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&q=80&auto=format&fit=crop"
+      },
+      {
+        title: "Hannah Guay",
+        body: "Product Manager",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=240&q=80&auto=format&fit=crop&crop=faces"
+      },
+      {
+        title: "Graham Hutchins",
+        body: "Design Director",
+        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=240&q=80&auto=format&fit=crop&crop=faces"
+      },
+      {
+        title: "Tabatha Roche",
+        body: "Content Strategist",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=240&q=80&auto=format&fit=crop&crop=entropy"
+      },
+      {
+        title: "Nate Christofferson",
+        body: "Visual Designer",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&q=80&auto=format&fit=crop&crop=faces"
+      },
+      {
+        title: "Roxy Velez",
+        body: "Interaction Designer",
+        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=240&q=80&auto=format&fit=crop&crop=faces"
+      },
+      {
+        title: "Jay Meagher",
+        body: "Creative Technologist",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&q=80&auto=format&fit=crop&crop=faces"
+      },
+      {
+        title: "Erin Bradley",
+        body: "Design Mentor",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=240&q=80&auto=format&fit=crop&crop=faces"
+      },
+      {
+        title: "Frank Suarez",
+        body: "Product Coach",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&q=80&auto=format&fit=crop&crop=entropy"
+      }
+    ],
     bullets: [
       "Flexible licenses you can reassign anytime",
       "Consolidated billing for finance clarity",
       "Team progress dashboard and milestones",
       "Priority support and onboarding help"
     ],
-    cta: { label: "Talk to our team", href: "/" }
+    cta: { label: "Talk to our team", href: "/#contact" }
   },
   blog: {
     slug: "blog",

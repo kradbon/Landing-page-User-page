@@ -166,6 +166,12 @@ function migrateLandingBranding(data: LandingData) {
         if (block.type === "paths" && props?.cta?.href === "#programs") {
           props.cta = { ...props.cta, href: "/programs" };
         }
+        if (props?.cta?.label?.toLowerCase?.().includes("apply") && ["/all-access", "/"].includes(props.cta.href)) {
+          props.cta = { ...props.cta, href: "/#contact" };
+        }
+        if (props?.primaryCta?.label?.toLowerCase?.().includes("application") && ["/all-access", "/"].includes(props.primaryCta.href)) {
+          props.primaryCta = { ...props.primaryCta, href: "/#contact" };
+        }
         return { ...block, props };
       })
   };

@@ -308,8 +308,9 @@ export function Testimonials({ block }: { block: Block }) {
   );
 }
 
-export function Faq({ block }: { block: Block }) {
+export function Faq({ block, tenant }: { block: Block; tenant?: Tenant }) {
   if (block.props.variant !== "pricing") return null;
+  const contactHref = resolveTenantHref(tenant, "/#contact");
   const icons = [
     (
       <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -345,7 +346,11 @@ export function Faq({ block }: { block: Block }) {
         </div>
         <div className="mx-auto grid max-w-5xl gap-8 text-center sm:grid-cols-2 lg:grid-cols-3">
           {block.props.items?.map((item: any, index: number) => (
-            <div key={item.title} className="flex h-full flex-col items-center">
+            <div
+              key={item.title}
+              className="group relative flex h-full flex-col items-center rounded-[22px] border border-slate-200/70 bg-white/95 px-6 py-8 text-slate-700 shadow-[0_18px_40px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(15,23,42,0.14)]"
+            >
+              <div className="pointer-events-none absolute inset-0 -z-10 rounded-[24px] bg-[radial-gradient(circle_at_top,_rgba(13,110,106,0.16),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(214,153,67,0.2),_transparent_60%)] opacity-0 transition duration-300 group-hover:opacity-100" />
               <div className="text-slate-700">{icons[index % icons.length]}</div>
               <p className="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600">{item.title}</p>
               <div className="mt-2 flex items-baseline gap-2">
@@ -360,9 +365,12 @@ export function Faq({ block }: { block: Block }) {
                   </li>
                 ))}
               </ul>
-              <button className="mt-8 w-full max-w-[180px] rounded-[12px] bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-primary/90">
+              <a
+                href={contactHref}
+                className="mt-8 w-full max-w-[180px] rounded-[12px] bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-primary/90"
+              >
                 {item.cta}
-              </button>
+              </a>
             </div>
           ))}
         </div>

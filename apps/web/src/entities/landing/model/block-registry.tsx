@@ -73,7 +73,7 @@ export const blockRegistry: Record<Block["type"], BlockDefinition> = {
         { label: "Blog", href: "/blog" }
       ],
       secondaryCta: { label: "Login", href: "/login" },
-      cta: { label: "Apply now", href: "/all-access", variant: "solid" }
+      cta: { label: "Apply now", href: "/#contact", variant: "solid" }
     },
     schema: z.object({
       brand: z.string(),
@@ -91,7 +91,7 @@ export const blockRegistry: Record<Block["type"], BlockDefinition> = {
       headline: "Build the craft and",
       headlineAccent: "confidence teams hire",
       subheadline: "Short, confident hero description goes here.",
-      primaryCta: { label: "Start your application", href: "/all-access", variant: "solid" },
+      primaryCta: { label: "Start your application", href: "/#contact", variant: "solid" },
       secondaryCta: { label: "See outcomes", href: "/about-us" },
       bullets: ["Mentor-led Brooklyn LMS", "Portfolio-grade case study", "Hiring playbook"],
       image: ""
@@ -228,7 +228,7 @@ export const blockRegistry: Record<Block["type"], BlockDefinition> = {
         })
       )
     }),
-    Render: ({ block }) => <Faq block={block} />,
+    Render: ({ block, tenant }) => <Faq block={block} tenant={tenant} />,
     Editor: FaqEditor
   },
   "apply-form": {

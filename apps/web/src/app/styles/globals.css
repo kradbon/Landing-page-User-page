@@ -219,6 +219,29 @@ section {
   }
 }
 
+@keyframes team-float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.team-float {
+  animation: team-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-float {
+    animation: none;
+  }
+}
+
 .animate-loader-bar {
   animation: loader-bar 4s linear infinite;
   will-change: transform;

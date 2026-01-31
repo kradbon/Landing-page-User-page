@@ -139,6 +139,7 @@ function StandardLayout({ page, resolveHref }: { page: PageContent; resolveHref:
 }
 
 function TeamLayout({ page, resolveHref }: { page: PageContent; resolveHref: (href?: string) => string }) {
+  const team = page.cards || [];
   return (
     <>
       <section className="mx-auto w-full max-w-6xl px-6 py-20">
@@ -171,7 +172,48 @@ function TeamLayout({ page, resolveHref }: { page: PageContent; resolveHref: (hr
           </div>
         </div>
       </section>
-      {page.heroImage ? (
+      {team.length ? (
+        <section className="relative overflow-hidden bg-slate-950 py-16 text-white">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(13,110,106,0.28),_transparent_55%),radial-gradient(circle_at_bottom_right,_rgba(214,153,67,0.22),_transparent_60%)]" />
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/60">Our team</p>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">Meet the Brooklyn LMS team</h2>
+              <p className="mx-auto mt-3 max-w-xl text-sm text-white/70">
+                A mix of educators, mentors, and working designers who build and show the work every day.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {team.map((member, index) => (
+                <div key={`${member.title}-${index}`} className="group flex flex-col items-center gap-3 text-center">
+                  <div className="relative">
+                    <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-white/10 blur-xl opacity-0 transition duration-300 group-hover:opacity-100" />
+                    {member.image ? (
+                      <img
+                        src={member.image}
+                        alt={member.title}
+                        className="team-float h-20 w-20 rounded-full object-cover ring-2 ring-white/10 transition duration-300 group-hover:scale-105"
+                        style={{
+                          animationDelay: `${(index % 8) * 0.15}s`,
+                          animationDuration: `${5 + (index % 4)}s`
+                        }}
+                      />
+                    ) : (
+                      <div className="team-float flex h-20 w-20 items-center justify-center rounded-full bg-white/10 text-xs text-white/60">
+                        Team
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-white">{member.title}</p>
+                    {member.body ? <p className="text-[11px] text-white/60">{member.body}</p> : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : page.heroImage ? (
         <Section>
           <img src={page.heroImage} alt={page.title} className="h-[420px] w-full rounded-[28px] object-cover" />
         </Section>
@@ -183,25 +225,25 @@ function TeamLayout({ page, resolveHref }: { page: PageContent; resolveHref: (hr
 function BlogLayout({ page, resolveHref }: { page: PageContent; resolveHref: (href?: string) => string }) {
   return (
     <>
-      <section className="bg-slate-950 py-16 text-white">
+      <section className="bg-background py-16 text-text">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 md:grid-cols-[1.1fr_0.9fr]">
-          <div className="overflow-hidden rounded-[28px] bg-gradient-to-br from-emerald-500/20 via-slate-900 to-amber-900/40">
+          <div className="overflow-hidden rounded-[28px] border border-slate-200/70 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
             {page.heroImage ? (
               <img src={page.heroImage} alt={page.title} className="h-64 w-full object-cover" />
             ) : (
-              <div className="flex h-64 items-center justify-center rounded-[20px] border border-white/10 text-sm text-slate-300">
+              <div className="flex h-64 items-center justify-center rounded-[20px] border border-slate-200 text-sm text-slate-400">
                 Add a featured image
               </div>
             )}
           </div>
           <div className="flex flex-col justify-center gap-4">
             {page.eyebrow ? (
-              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/70">{page.eyebrow}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-secondary">{page.eyebrow}</span>
             ) : null}
-            <h1 className="font-display text-3xl md:text-4xl">{page.title}</h1>
-            {page.subtitle ? <p className="text-sm text-slate-300">{page.subtitle}</p> : null}
+            <h1 className="font-display text-3xl md:text-4xl text-slate-900">{page.title}</h1>
+            {page.subtitle ? <p className="text-sm text-slate-600">{page.subtitle}</p> : null}
             {page.cta ? (
-              <a href={resolveHref(page.cta.href)} className="text-sm font-semibold text-secondary">
+              <a href={resolveHref(page.cta.href)} className="text-sm font-semibold text-primary">
                 {page.cta.label}
               </a>
             ) : null}

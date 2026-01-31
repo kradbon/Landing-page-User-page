@@ -46,7 +46,7 @@ export const defaultLandingData: LandingData = {
           { label: "Teams", href: "/team-training" }
         ],
         secondaryCta: { label: "Login", href: "/login" },
-        cta: { label: "Apply now", href: "/all-access", variant: "solid" }
+        cta: { label: "Apply now", href: "/#contact", variant: "solid" }
       }
     },
     {
@@ -58,7 +58,7 @@ export const defaultLandingData: LandingData = {
         headlineAccent: "confidence teams hire",
         subheadline:
           "An 8-week intensive where you ship a real product, master UX strategy, and graduate with a portfolio backed by industry mentors.",
-        primaryCta: { label: "Start your application", href: "/all-access", variant: "solid" },
+        primaryCta: { label: "Start your application", href: "/#contact", variant: "solid" },
         secondaryCta: { label: "See outcomes", href: "/about-us" },
         bullets: ["Mentor-led Brooklyn LMS", "Portfolio-grade case study", "Hiring playbook"],
         image:
