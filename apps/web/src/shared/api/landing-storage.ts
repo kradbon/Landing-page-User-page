@@ -442,7 +442,7 @@ export function summarizeLandingChanges(prev: LandingData, next: LandingData): A
   next.blocks.forEach((block) => {
     const previous = prevMap.get(block.id);
     if (!previous) {
-      changes.push({ label: `Added ${block.type}`, path: `blocks.${block.id}`, after: block.type });
+      changes.push({ label: `Added ${block.type}`, path: `blocks.${block.id}`, before: null, after: block.type });
       return;
     }
     if (previous.type !== block.type) {

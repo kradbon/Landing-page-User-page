@@ -106,6 +106,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   const pageSlug = pathname?.startsWith("/admin/pages") ? searchParams?.get("slug") || "about-us" : "home";
   const workspaceLabel = pageLabelMap[pageSlug] || "Landing page";
+  const safePath = pathname || "";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -248,7 +249,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             ) : (
               <nav className="space-y-2">
                 {navItems.map((item) => {
-                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const active = safePath === item.href || safePath.startsWith(`${item.href}/`);
                   return (
                     <Link
                       key={item.href}
