@@ -278,7 +278,7 @@ export async function saveDraftLanding(data: LandingData, actor?: AuditEvent["ac
   await addAuditEvent(
     createAuditEvent(
       `Saved draft (${lang.toUpperCase()})`,
-      changes.length ? changes : [{ label: "Draft saved", path: `draft.${lang}` }],
+      changes.length ? changes : [{ label: "Draft saved", path: `draft.${lang}`, before: null, after: null }],
       actor
     )
   );
@@ -295,7 +295,7 @@ export async function publishLanding(data: LandingData, actor?: AuditEvent["acto
   await addAuditEvent(
     createAuditEvent(
       `Published (${lang.toUpperCase()})`,
-      changes.length ? changes : [{ label: "Published landing", path: `published.${lang}` }],
+      changes.length ? changes : [{ label: "Published landing", path: `published.${lang}`, before: null, after: null }],
       actor
     )
   );
@@ -327,7 +327,11 @@ export async function savePage(slug: string, data: PageContent, actor?: AuditEve
   const next = { ...pages, [slug]: data };
   writeJson(STORAGE_KEYS.pages, next);
   await addAuditEvent(
-    createAuditEvent("Updated page", [{ label: `Updated ${slug} page`, path: `pages.${slug}` }], actor)
+    createAuditEvent(
+      "Updated page",
+      [{ label: `Updated ${slug} page`, path: `pages.${slug}`, before: null, after: null }],
+      actor
+    )
   );
   await sleep(200);
   return data;
@@ -337,7 +341,11 @@ export async function saveTenant(tenant: Tenant, actor?: AuditEvent["actor"]) {
   ensureSeed();
   writeJson(STORAGE_KEYS.tenant, tenant);
   await addAuditEvent(
-    createAuditEvent("Updated branding", [{ label: "Updated tenant branding", path: "tenant" }], actor)
+    createAuditEvent(
+      "Updated branding",
+      [{ label: "Updated tenant branding", path: "tenant", before: null, after: null }],
+      actor
+    )
   );
   await sleep(200);
   return tenant;
@@ -355,7 +363,9 @@ export async function createLead(lead: Lead) {
   const next = [lead, ...leads];
   writeJson(STORAGE_KEYS.leads, next);
   await addAuditEvent(
-    createAuditEvent("New lead", [{ label: `${lead.applicant.firstName} ${lead.applicant.lastName} applied`, path: "leads" }])
+    createAuditEvent("New lead", [
+      { label: `${lead.applicant.firstName} ${lead.applicant.lastName} applied`, path: "leads", before: null, after: null }
+    ])
   );
   await sleep(200);
   return lead;
@@ -377,7 +387,9 @@ export async function updateLeadStatus(id: string, status: Lead["status"]) {
   });
   writeJson(STORAGE_KEYS.leads, next);
   await addAuditEvent(
-    createAuditEvent("Lead status", [{ label: `Lead ${id} marked ${status.toLowerCase()}`, path: "leads" }])
+    createAuditEvent("Lead status", [
+      { label: `Lead ${id} marked ${status.toLowerCase()}`, path: "leads", before: null, after: null }
+    ])
   );
   await sleep(200);
   return next.find((lead) => lead._id === id);
