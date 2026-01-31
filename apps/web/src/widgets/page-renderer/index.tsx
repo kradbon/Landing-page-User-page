@@ -26,6 +26,9 @@ export function PageRenderer({
   const resolveHref = (href?: string) => {
     if (!href) return "#";
     if (!href.startsWith("/")) return href;
+    if (href.startsWith("/#")) {
+      return `/${tenant.slug}/home${href}`;
+    }
     if (href === "/login" || href.endsWith("/login")) {
       const base = (env.userPageBaseUrl || "").replace(/\/+$/, "");
       return base ? `${base}/login` : "/portal/login";
@@ -116,28 +119,27 @@ function StandardLayout({ page, resolveHref }: { page: PageContent; resolveHref:
             return (
               <Section
                 key={section.heading}
-                className={clsx("border-t border-slate-200/70", isReversed ? "bg-white" : "bg-[#f7f4ee]")}
-                pad="2.6rem"
+                className={clsx("border-t border-slate-200/70", isReversed ? "bg-[#f7f4ee]" : "bg-white")}
+                pad="2.8rem"
               >
-                <div className={`grid items-center gap-10 md:grid-cols-2 ${isReversed ? "md:[&>*:first-child]:order-2" : ""}`}>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                      <span className="h-6 w-6 rounded-full border border-slate-300 text-center text-[10px] leading-[22px]">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span>Section</span>
+                <div className={`grid items-center gap-12 md:grid-cols-[0.95fr_1.05fr] ${isReversed ? "md:[&>*:first-child]:order-2" : ""}`}>
+                  <div className="space-y-5">
+                    <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <span className="h-px w-10 bg-slate-300" />
+                      <span>Focus</span>
                     </div>
-                    <h2 className="font-display text-3xl">{section.heading}</h2>
+                    <h2 className="font-display text-3xl md:text-4xl">{section.heading}</h2>
                     <p className="text-sm text-slate-600">{section.body}</p>
                   </div>
                   <div className="relative">
-                    <div className="absolute -inset-4 -z-10 rounded-[28px] bg-white/70 blur-2xl" />
+                    <div className="absolute -left-6 -top-6 h-full w-full rounded-[24px] border border-slate-200/60 bg-white/70" />
                     {section.image ? (
-                      <div className="overflow-hidden rounded-[24px] border border-slate-200/70 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
-                        <img src={section.image} alt={section.heading} className="h-64 w-full object-cover" />
+                      <div className="relative overflow-hidden rounded-[22px] bg-slate-100">
+                        <img src={section.image} alt={section.heading} className="h-72 w-full object-cover" />
                       </div>
                     ) : (
-                      <div className="h-64 rounded-[24px] border border-dashed border-slate-200 bg-white" />
+                      <div className="relative h-72 rounded-[22px] bg-slate-100" />
                     )}
                   </div>
                 </div>
@@ -278,26 +280,31 @@ function BlogLayout({ page, resolveHref }: { page: PageContent; resolveHref: (hr
             <span className="text-xs text-slate-400">{page.cards?.length || 0} posts</span>
           </div>
           <div className="divide-y divide-slate-200/70">
-            {(page.cards || []).map((card) => (
-              <article key={card.title} className="grid gap-6 py-6 md:grid-cols-[220px_1fr]">
-                {card.image ? (
-                  <div className="overflow-hidden rounded-[16px] border border-slate-200/70 bg-white">
-                    <img src={card.image} alt={card.title} className="h-36 w-full object-cover" />
+            {(page.cards || []).map((card, index) => (
+              <article key={card.title} className="grid gap-6 py-8 md:grid-cols-[60px_1fr]">
+                <div className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div className="grid gap-6 md:grid-cols-[240px_1fr]">
+                  {card.image ? (
+                    <div className="overflow-hidden rounded-[16px] border border-slate-200/70 bg-white">
+                      <img src={card.image} alt={card.title} className="h-36 w-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="flex h-36 items-center justify-center rounded-[16px] border border-slate-200 bg-white text-xs text-slate-400">
+                      Thumbnail
+                    </div>
+                  )}
+                  <div className="space-y-3">
+                    {card.tag ? (
+                      <span className="inline-flex w-fit rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-slate-500">
+                        {card.tag}
+                      </span>
+                    ) : null}
+                    <h3 className="text-xl font-semibold text-slate-900">{card.title}</h3>
+                    <p className="text-sm text-slate-600">{card.body}</p>
+                    <button className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Read more</button>
                   </div>
-                ) : (
-                  <div className="flex h-36 items-center justify-center rounded-[16px] border border-slate-200 bg-white text-xs text-slate-400">
-                    Thumbnail
-                  </div>
-                )}
-                <div className="space-y-3">
-                  {card.tag ? (
-                    <span className="inline-flex w-fit rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-slate-500">
-                      {card.tag}
-                    </span>
-                  ) : null}
-                  <h3 className="text-lg font-semibold text-slate-900">{card.title}</h3>
-                  <p className="text-sm text-slate-600">{card.body}</p>
-                  <button className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Read more</button>
                 </div>
               </article>
             ))}
@@ -419,30 +426,31 @@ function CoursesLayout({ page, resolveHref }: { page: PageContent; resolveHref: 
 
       {page.cards?.length ? (
         <section className="mx-auto w-full max-w-6xl px-6">
-          <div className="divide-y divide-slate-200/70 rounded-[20px] border border-slate-200/70 bg-white">
-            {page.cards.map((card) => (
-              <div key={card.title} className="grid gap-6 p-6 md:grid-cols-[180px_1fr]">
-                <div className="overflow-hidden rounded-[14px] border border-slate-200 bg-slate-100">
-                  {card.image ? (
-                    <img src={card.image} alt={card.title} className="h-28 w-full object-cover" />
-                  ) : (
-                    <div className="flex h-28 items-center justify-center text-xs text-slate-400">Thumbnail</div>
-                  )}
+          <div className="space-y-8">
+            {page.cards.map((card, index) => (
+              <div
+                key={card.title}
+                className="grid gap-6 border-b border-slate-200/70 pb-8 md:grid-cols-[220px_1fr]"
+              >
+                <div className="space-y-3">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
+                    Course {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <div className="overflow-hidden rounded-[16px] border border-slate-200 bg-slate-100">
+                    {card.image ? (
+                      <img src={card.image} alt={card.title} className="h-32 w-full object-cover" />
+                    ) : (
+                      <div className="flex h-32 items-center justify-center text-xs text-slate-400">Thumbnail</div>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-3">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {card.tag ? (
-                      <span className="rounded-full border border-slate-200 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                        {card.tag}
-                      </span>
-                    ) : null}
-                    {card.meta?.slice(0, 2).map((item) => (
-                      <span key={item} className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                  <h3 className="text-lg font-semibold text-slate-900">{card.title}</h3>
+                  {card.tag ? (
+                    <span className="inline-flex w-fit rounded-full border border-slate-200 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                      {card.tag}
+                    </span>
+                  ) : null}
+                  <h3 className="text-2xl font-semibold text-slate-900">{card.title}</h3>
                   <p className="text-sm text-slate-600">{card.body}</p>
                   {card.meta?.length ? (
                     <div className="flex flex-wrap gap-3 text-xs text-slate-500">

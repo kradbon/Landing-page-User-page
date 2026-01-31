@@ -28,6 +28,9 @@ export function resolveAnchor(block: Block) {
 
 function resolveTenantHref(tenant: Tenant | undefined, href?: string) {
   if (!href) return "#";
+  if (href.startsWith("/#")) {
+    return tenant ? `/${tenant.slug}/home${href}` : `/home${href}`;
+  }
   if (!tenant || !href.startsWith("/")) return href;
   const isLogin =
     href === "/login" ||
